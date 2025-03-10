@@ -2,7 +2,24 @@ const db = require('../database/config');
 const { v4: uuidv4 } = require('uuid');
 const QRCode = require('qrcode');
 
+/**
+ * @typedef {Object} Share
+ * @property {string} id - The unique identifier for the share.
+ * @property {string} workoutId - The ID of the workout being shared.
+ * @property {string} link - The URL link to the shared workout.
+ * @property {string} qrCode - The QR code image data URL.
+ */
+
+/**
+ * Repository for managing shared workouts in the database.
+ * @class
+ */
 class ShareRepository {
+  /**
+   * Create a share for a workout.
+   * @param {string} workoutId - The ID of the workout to share.
+   * @returns {Promise<Object>} The created share object containing id, workoutId, link, and qrCode.
+   */
   async createShare(workoutId) {
     const id = uuidv4();
     const link = `${process.env.BASE_URL || 'http://localhost:3000'}/api/workouts/shared/${id}`;
@@ -22,6 +39,11 @@ class ShareRepository {
     });
   }
 
+  /**
+   * Find a shared workout by its share ID.
+   * @param {string} shareId - The ID of the shared workout.
+   * @returns {Promise<Object|null>} The shared workout object or null if not found.
+   */
   async findByShareId(shareId) {
     return new Promise((resolve, reject) => {
       db.get(
@@ -70,6 +92,11 @@ class ShareRepository {
     });
   }
 
+  /**
+   * Delete a share by its share ID.
+   * @param {string} shareId - The ID of the share to delete.
+   * @returns {Promise<void>}
+   */
   async deleteShare(shareId) {
     return new Promise((resolve, reject) => {
       db.run('DELETE FROM shared_workouts WHERE id = ?', [shareId], (err) => {

@@ -1,6 +1,16 @@
 const workoutService = require('../services/workoutService');
 
+/**
+ * Controller for managing workouts.
+ * @class
+ */
 class WorkoutController {
+  /**
+   * Create a new workout.
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @returns {Promise<void>}
+   */
   async createWorkout(req, res) {
     try {
       const { name, description } = req.body;
@@ -11,6 +21,12 @@ class WorkoutController {
     }
   }
 
+  /**
+   * Add an exercise to a workout.
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @returns {Promise<void>}
+   */
   async addExerciseToWorkout(req, res) {
     try {
       const { workoutId } = req.params;
@@ -22,6 +38,12 @@ class WorkoutController {
     }
   }
 
+  /**
+   * Get all workouts.
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @returns {Promise<void>}
+   */
   async getAllWorkouts(req, res) {
     try {
       const workouts = await workoutService.getAllWorkouts();
@@ -31,6 +53,12 @@ class WorkoutController {
     }
   }
 
+  /**
+   * Get a workout by ID.
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @returns {Promise<void>}
+   */
   async getWorkoutById(req, res) {
     try {
       const workout = await workoutService.getWorkoutById(req.params.id);
@@ -40,6 +68,12 @@ class WorkoutController {
     }
   }
 
+  /**
+   * Update a workout by ID.
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @returns {Promise<void>}
+   */
   async updateWorkout(req, res) {
     try {
       const { name, description } = req.body;
@@ -50,6 +84,12 @@ class WorkoutController {
     }
   }
 
+  /**
+   * Delete a workout by ID.
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @returns {Promise<void>}
+   */
   async deleteWorkout(req, res) {
     try {
       await workoutService.deleteWorkout(req.params.id);

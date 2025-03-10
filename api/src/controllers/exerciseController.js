@@ -1,6 +1,16 @@
 const exerciseService = require('../services/exerciseService');
 
+/**
+ * Controller for managing exercises.
+ * @class
+ */
 class ExerciseController {
+  /**
+   * Create a new exercise.
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @returns {Promise<void>}
+   */
   async createExercise(req, res) {
     try {
       const { name, muscleGroup } = req.body;
@@ -11,6 +21,12 @@ class ExerciseController {
     }
   }
 
+  /**
+   * Get all exercises.
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @returns {Promise<void>}
+   */
   async getAllExercises(req, res) {
     try {
       const exercises = await exerciseService.getAllExercises();
@@ -20,6 +36,12 @@ class ExerciseController {
     }
   }
 
+  /**
+   * Get an exercise by ID.
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @returns {Promise<void>}
+   */
   async getExerciseById(req, res) {
     try {
       const exercise = await exerciseService.getExerciseById(req.params.id);
@@ -29,6 +51,12 @@ class ExerciseController {
     }
   }
 
+  /**
+   * Update an exercise by ID.
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @returns {Promise<void>}
+   */
   async updateExercise(req, res) {
     try {
       const { name, muscleGroup } = req.body;
@@ -39,6 +67,12 @@ class ExerciseController {
     }
   }
 
+  /**
+   * Delete an exercise by ID.
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @returns {Promise<void>}
+   */
   async deleteExercise(req, res) {
     try {
       await exerciseService.deleteExercise(req.params.id);

@@ -1,7 +1,24 @@
 const db = require('../database/config');
 const { v4: uuidv4 } = require('uuid');
 
+/**
+ * @typedef {Object} Exercise
+ * @property {string} id - The unique identifier for the exercise.
+ * @property {string} name - The name of the exercise.
+ * @property {string} muscleGroup - The muscle group targeted by the exercise.
+ */
+
+/**
+ * Repository for managing exercises in the database.
+ * @class
+ */
 class ExerciseRepository {
+  /**
+   * Create a new exercise.
+   * @param {string} name - The name of the exercise.
+   * @param {string} muscleGroup - The muscle group the exercise targets.
+   * @returns {Promise<Object>} The created exercise object.
+   */
   async create(name, muscleGroup) {
     const id = uuidv4();
     return new Promise((resolve, reject) => {
@@ -16,6 +33,10 @@ class ExerciseRepository {
     });
   }
 
+  /**
+   * Retrieve all exercises.
+   * @returns {Promise<Array>} A list of all exercises.
+   */
   async findAll() {
     return new Promise((resolve, reject) => {
       db.all('SELECT * FROM exercises', (err, rows) => {
@@ -25,6 +46,11 @@ class ExerciseRepository {
     });
   }
 
+  /**
+   * Find an exercise by its ID.
+   * @param {string} id - The ID of the exercise.
+   * @returns {Promise<Object|null>} The exercise object or null if not found.
+   */
   async findById(id) {
     return new Promise((resolve, reject) => {
       db.get('SELECT * FROM exercises WHERE id = ?', [id], (err, row) => {
@@ -34,6 +60,13 @@ class ExerciseRepository {
     });
   }
 
+  /**
+   * Update an existing exercise.
+   * @param {string} id - The ID of the exercise to update.
+   * @param {string} name - The new name of the exercise.
+   * @param {string} muscleGroup - The new muscle group the exercise targets.
+   * @returns {Promise<Object>} The updated exercise object.
+   */
   async update(id, name, muscleGroup) {
     return new Promise((resolve, reject) => {
       db.run(
@@ -47,6 +80,11 @@ class ExerciseRepository {
     });
   }
 
+  /**
+   * Delete an exercise by its ID.
+   * @param {string} id - The ID of the exercise to delete.
+   * @returns {Promise<void>}
+   */
   async delete(id) {
     return new Promise((resolve, reject) => {
       db.run('DELETE FROM exercises WHERE id = ?', [id], (err) => {
@@ -56,6 +94,11 @@ class ExerciseRepository {
     });
   }
 
+  /**
+   * Find an exercise by its name.
+   * @param {string} name - The name of the exercise.
+   * @returns {Promise<Object|null>} The exercise object or null if not found.
+   */
   async findByName(name) {
     return new Promise((resolve, reject) => {
       db.get('SELECT * FROM exercises WHERE name = ?', [name], (err, row) => {

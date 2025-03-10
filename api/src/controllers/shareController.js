@@ -1,6 +1,16 @@
 const shareService = require('../services/shareService');
 
+/**
+ * Controller for managing shared workouts.
+ * @class
+ */
 class ShareController {
+  /**
+   * Share a workout.
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @returns {Promise<void>}
+   */
   async shareWorkout(req, res) {
     try {
       const { workoutId } = req.params;
@@ -11,6 +21,12 @@ class ShareController {
     }
   }
 
+  /**
+   * Get a shared workout by ID.
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @returns {Promise<void>}
+   */
   async getSharedWorkout(req, res) {
     try {
       const { shareId } = req.params;
@@ -21,6 +37,12 @@ class ShareController {
     }
   }
 
+  /**
+   * Delete a shared workout by ID.
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @returns {Promise<void>}
+   */
   async deleteShare(req, res) {
     try {
       const { shareId } = req.params;
