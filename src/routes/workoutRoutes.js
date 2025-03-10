@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const workoutController = require('../controllers/workoutController');
+const shareController = require('../controllers/shareController');
 
 // Create a new workout
 router.post('/', workoutController.createWorkout);
@@ -19,5 +20,7 @@ router.put('/:id', workoutController.updateWorkout);
 
 // Delete a workout
 router.delete('/:id', workoutController.deleteWorkout);
+
+router.get('/shared/:shareId', shareController.getSharedWorkout);
 
 module.exports = router; 
