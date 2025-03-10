@@ -1,0 +1,42 @@
+@baseUrl = http://localhost:3000/api
+
+### Create a new workout
+POST {{baseUrl}}/workouts
+Content-Type: application/json
+
+{
+    "name": "Upper Body Workout",
+    "description": "Focus on chest, shoulders, and triceps"
+}
+
+### Add exercise to workout
+# Replace :workoutId with an actual workout ID
+POST {{baseUrl}}/workouts/:workoutId/exercises
+Content-Type: application/json
+
+{
+    "exerciseId": "exercise-id-here",
+    "reps": 12,
+    "interval": 60
+}
+
+### Get all workouts
+GET {{baseUrl}}/workouts
+
+### Get workout by ID
+# Replace :id with an actual workout ID
+GET {{baseUrl}}/workouts/:id
+
+### Update workout
+# Replace :id with an actual workout ID
+PUT {{baseUrl}}/workouts/:id
+Content-Type: application/json
+
+{
+    "name": "Updated Upper Body Workout",
+    "description": "Focus on chest, shoulders, triceps, and back"
+}
+
+### Delete workout
+# Replace :id with an actual workout ID
+DELETE {{baseUrl}}/workouts/:id 

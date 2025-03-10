@@ -1,0 +1,31 @@
+@baseUrl = http://localhost:3000/api
+
+### Create a new exercise
+POST {{baseUrl}}/exercises
+Content-Type: application/json
+
+{
+    "name": "Bench Press",
+    "muscleGroup": "Chest"
+}
+
+### Get all exercises
+GET {{baseUrl}}/exercises
+
+### Get exercise by ID
+# Replace :id with an actual exercise ID
+GET {{baseUrl}}/exercises/:id
+
+### Update exercise
+# Replace :id with an actual exercise ID
+PUT {{baseUrl}}/exercises/:id
+Content-Type: application/json
+
+{
+    "name": "Incline Bench Press",
+    "muscleGroup": "Upper Chest"
+}
+
+### Delete exercise
+# Replace :id with an actual exercise ID
+DELETE {{baseUrl}}/exercises/:id 

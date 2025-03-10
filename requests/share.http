@@ -1,0 +1,13 @@
+@baseUrl = http://localhost:3000/api
+
+### Share a workout
+# Replace :workoutId with an actual workout ID
+POST {{baseUrl}}/share/workouts/:workoutId
+
+### Get shared workout
+# Replace :shareId with an actual share ID
+GET {{baseUrl}}/share/:shareId
+
+### Delete share
+# Replace :shareId with an actual share ID
+DELETE {{baseUrl}}/share/:shareId 
