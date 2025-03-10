@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
+const { mutationLimiter } = require('../middleware/rateLimiters');
 const workoutController = require('../controllers/workoutController');
 const shareController = require('../controllers/shareController');
 
 // Create a new workout
-router.post('/', workoutController.createWorkout);
+router.post('/', mutationLimiter, workoutController.createWorkout);
 
 // Add exercise to workout
 router.post('/:workoutId/exercises', workoutController.addExerciseToWorkout);
@@ -16,10 +17,10 @@ router.get('/', workoutController.getAllWorkouts);
 router.get('/:id', workoutController.getWorkoutById);
 
 // Update a workout
-router.put('/:id', workoutController.updateWorkout);
+router.put('/:id', mutationLimiter, workoutController.updateWorkout);
 
 // Delete a workout
-router.delete('/:id', workoutController.deleteWorkout);
+router.delete('/:id', mutationLimiter, workoutController.deleteWorkout);
 
 router.get('/shared/:shareId', shareController.getSharedWorkout);
 

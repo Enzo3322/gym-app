@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
+const { mutationLimiter } = require('../middleware/rateLimiters');
 const exerciseController = require('../controllers/exerciseController');
 
 // Create a new exercise
-router.post('/', exerciseController.createExercise);
+router.post('/', mutationLimiter, exerciseController.createExercise);
 
 // Get all exercises
 router.get('/', exerciseController.getAllExercises);
@@ -12,9 +13,9 @@ router.get('/', exerciseController.getAllExercises);
 router.get('/:id', exerciseController.getExerciseById);
 
 // Update an exercise
-router.put('/:id', exerciseController.updateExercise);
+router.put('/:id', mutationLimiter, exerciseController.updateExercise);
 
 // Delete an exercise
-router.delete('/:id', exerciseController.deleteExercise);
+router.delete('/:id', mutationLimiter, exerciseController.deleteExercise);
 
 module.exports = router; 

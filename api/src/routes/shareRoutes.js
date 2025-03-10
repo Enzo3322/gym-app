@@ -1,11 +1,10 @@
 const express = require('express');
 const router = express.Router();
+const { shareLimiter } = require('../middleware/rateLimiters');
 const shareController = require('../controllers/shareController');
 
-// Share a workout
-router.post('/workouts/:workoutId', shareController.shareWorkout);
-
-// Get a shared workout
+// Share routes (with share rate limiting)
+router.post('/workout/:id', shareLimiter, shareController.shareWorkout);
 router.get('/:shareId', shareController.getSharedWorkout);
 
 // Delete a share
