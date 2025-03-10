@@ -101,6 +101,14 @@ class WorkoutRepository {
       });
     });
   }
+
+  async findByName(name) {
+    return new Promise((resolve, reject) => {
+      db.get('SELECT * FROM workouts WHERE name = ?', [name], (err, row) => {
+        resolve(row);
+      });
+    });
+  }
 }
 
 module.exports = new WorkoutRepository(); 

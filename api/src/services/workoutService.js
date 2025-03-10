@@ -6,6 +6,12 @@ class WorkoutService {
     if (!name) {
       throw new Error('Workout name is required');
     }
+
+    const existingWorkout = await workoutRepository.findByName(name);
+    if (existingWorkout) {
+      throw new Error('Workout already exists');
+    }
+
     return await workoutRepository.create(name, description);
   }
 
@@ -45,6 +51,13 @@ class WorkoutService {
     if (!workout) {
       throw new Error('Workout not found');
     }
+
+    const existingWorkout = await workoutRepository.findByName(name);
+    
+    if (existingWorkout && existingWorkout.name === name) {
+      throw new Error('Workout already exists');
+    }
+
     return await workoutRepository.update(id, name, description);
   }
 

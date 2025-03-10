@@ -5,6 +5,13 @@ class ExerciseService {
     if (!name) {
       throw new Error('Exercise name is required');
     }
+
+    const existingExercise = await exerciseRepository.findByName(name);
+
+    if (existingExercise) {
+      throw new Error('Exercise already exists');
+    }
+
     return await exerciseRepository.create(name, muscleGroup);
   }
 
@@ -25,6 +32,13 @@ class ExerciseService {
     if (!exercise) {
       throw new Error('Exercise not found');
     }
+
+    const existingExercise = await exerciseRepository.findByName(name);
+
+    if (existingExercise && existingExercise.name === name) {
+      throw new Error('Exercise already exists');
+    }
+
     return await exerciseRepository.update(id, name, muscleGroup);
   }
 

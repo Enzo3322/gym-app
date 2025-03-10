@@ -55,6 +55,14 @@ class ExerciseRepository {
       });
     });
   }
+
+  async findByName(name) {
+    return new Promise((resolve, reject) => {
+      db.get('SELECT * FROM exercises WHERE name = ?', [name], (err, row) => {
+        resolve(row);
+      });
+    });
+  }
 }
 
 module.exports = new ExerciseRepository(); 
