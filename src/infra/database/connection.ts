@@ -3,8 +3,15 @@ import Database from 'better-sqlite3';
 import path from 'path';
 import * as schema from './schema';
 
-// Inicializa o banco de dados SQLite
-const sqlite = new Database(path.resolve(__dirname, 'db.sqlite'));
-const db = drizzle(sqlite, { schema });
+// Type for sqlite that avoids the naming conflict
+type SqliteDatabase = any;
 
-export { db, sqlite }; 
+// Initialize the SQLite database
+const dbPath = path.resolve(__dirname, '../../../sqlite/db.sqlite');
+// Create the database instance and cast to our custom type
+const sqliteDb = new Database(dbPath) as SqliteDatabase;
+const db = drizzle(sqliteDb, { schema });
+
+// Export with type annotations that avoid naming conflicts
+export { db };
+export const sqlite: SqliteDatabase = sqliteDb; 

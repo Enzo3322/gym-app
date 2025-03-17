@@ -9,6 +9,7 @@ CREATE TABLE `shared_workouts` (
 	`workout_id` text NOT NULL,
 	`link` text NOT NULL,
 	`qr_code` text NOT NULL,
+  	`created_at` integer NOT NULL,
 	FOREIGN KEY (`workout_id`) REFERENCES `workouts`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint

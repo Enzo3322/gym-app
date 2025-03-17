@@ -8,3 +8,5 @@ src/database/database.sqlite
 
 # Coverage
 coverage/
+
+dist
