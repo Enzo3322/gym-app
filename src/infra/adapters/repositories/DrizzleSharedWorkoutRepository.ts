@@ -54,7 +54,7 @@ export class DrizzleSharedWorkoutRepository implements SharedWorkoutRepository {
       sharedWorkout.workoutId,
       sharedWorkout.link,
       sharedWorkout.qrCode,
-      sharedWorkout.createdAt.getTime()
+      sharedWorkout.createdAt
     );
     
     return sharedWorkout;

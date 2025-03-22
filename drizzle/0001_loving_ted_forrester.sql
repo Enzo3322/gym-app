@@ -9,8 +9,17 @@ CREATE TABLE IF NOT EXISTS `shared_workouts` (
 	`workout_id` text NOT NULL,
 	`link` text NOT NULL,
 	`qr_code` text NOT NULL,
-  	`created_at` integer NOT NULL,
-	FOREIGN KEY (`workout_id`) REFERENCES `workouts`(`id`) ON UPDATE no action ON DELETE no action
+	`created_at` integer NOT NULL,
+	FOREIGN KEY (`workout_id`) REFERENCES `workouts`(`id`) ON UPDATE no action ON DELETE cascade
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS `users` (
+	`id` text PRIMARY KEY NOT NULL,
+	`name` text NOT NULL,
+	`email` text NOT NULL,
+	`password` text NOT NULL,
+	`role` text DEFAULT 'user' NOT NULL,
+	`created_at` integer NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS `workout_exercises` (
@@ -28,3 +37,5 @@ CREATE TABLE IF NOT EXISTS `workouts` (
 	`name` text NOT NULL,
 	`description` text
 );
+--> statement-breakpoint
+CREATE UNIQUE INDEX `users_email_unique` ON `users` (`email`);

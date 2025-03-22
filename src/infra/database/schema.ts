@@ -32,4 +32,13 @@ export const sharedWorkouts = sqliteTable('shared_workouts', {
   link: text('link').notNull(),
   qrCode: text('qr_code').notNull(),
   createdAt: integer('created_at', { mode: 'timestamp' }).notNull()
-}); 
+});
+
+export const users = sqliteTable('users', {
+  id: text('id').primaryKey(),
+  name: text('name').notNull(),
+  email: text('email').notNull().unique(),
+  password: text('password').notNull(),
+  role: text('role', { enum: ['user', 'admin', 'root'] }).notNull().default('user'),
+  createdAt: integer('created_at', { mode: 'timestamp' }).notNull()
+});

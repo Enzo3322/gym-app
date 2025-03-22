@@ -10,6 +10,7 @@ dotenv.config();
 import { DrizzleExerciseRepository } from './infra/adapters/repositories/DrizzleExerciseRepository';
 import { DrizzleWorkoutRepository } from './infra/adapters/repositories/DrizzleWorkoutRepository';
 import { DrizzleSharedWorkoutRepository } from './infra/adapters/repositories/DrizzleSharedWorkoutRepository';
+import { DrizzleUserRepository } from './infra/adapters/repositories/DrizzleUserRepository';
 
 // Importação dos casos de uso
 import { CreateExerciseUseCase } from './domain/use-cases/exercise/CreateExerciseUseCase';
@@ -31,20 +32,38 @@ import { ShareWorkoutUseCase } from './domain/use-cases/share/ShareWorkoutUseCas
 import { GetSharedWorkoutUseCase } from './domain/use-cases/share/GetSharedWorkoutUseCase';
 import { DeleteShareUseCase } from './domain/use-cases/share/DeleteShareUseCase';
 
+// Importação dos casos de uso para usuários
+import { CreateUserUseCase } from './domain/use-cases/user/CreateUserUseCase';
+import { GetUserUseCase } from './domain/use-cases/user/GetUserUseCase';
+import { ListUsersUseCase } from './domain/use-cases/user/ListUsersUseCase';
+import { UpdateUserUseCase } from './domain/use-cases/user/UpdateUserUseCase';
+import { DeleteUserUseCase } from './domain/use-cases/user/DeleteUserUseCase';
+
+// Importação do caso de uso para autenticação
+import { LoginUseCase } from './domain/use-cases/auth/LoginUseCase';
+
 // Importação de controladores
 import { ExerciseController } from './infra/controllers/ExerciseController';
 import { WorkoutController } from './infra/controllers/WorkoutController';
 import { ShareController } from './infra/controllers/ShareController';
+import { UserController } from './infra/controllers/UserController';
+import { AuthController } from './infra/controllers/AuthController';
 
 // Importação das rotas
 import { makeExerciseRoutes } from './infra/routes/exerciseRoutes';
 import { makeWorkoutRoutes } from './infra/routes/workoutRoutes';
 import { makeShareRoutes } from './infra/routes/shareRoutes';
+import { makeUserRoutes } from './infra/routes/userRoutes';
+import { makeAuthRoutes } from './infra/routes/authRoutes';
+
+// Importação do middleware de autenticação
+import { AuthMiddleware } from './infra/middlewares/AuthMiddleware';
 
 // Inicialização dos repositórios
 const exerciseRepository = new DrizzleExerciseRepository();
 const workoutRepository = new DrizzleWorkoutRepository();
 const sharedWorkoutRepository = new DrizzleSharedWorkoutRepository();
+const userRepository = new DrizzleUserRepository();
 
 // Inicialização dos casos de uso
 const createExerciseUseCase = new CreateExerciseUseCase(exerciseRepository);
@@ -66,6 +85,20 @@ const baseUrl = process.env.BASE_URL || 'http://localhost:3000';
 const shareWorkoutUseCase = new ShareWorkoutUseCase(sharedWorkoutRepository, workoutRepository, baseUrl);
 const getSharedWorkoutUseCase = new GetSharedWorkoutUseCase(sharedWorkoutRepository, workoutRepository);
 const deleteShareUseCase = new DeleteShareUseCase(sharedWorkoutRepository);
+
+// Inicialização dos casos de uso para usuários
+const createUserUseCase = new CreateUserUseCase(userRepository);
+const getUserUseCase = new GetUserUseCase(userRepository);
+const listUsersUseCase = new ListUsersUseCase(userRepository);
+const updateUserUseCase = new UpdateUserUseCase(userRepository);
+const deleteUserUseCase = new DeleteUserUseCase(userRepository);
+
+// Inicialização do caso de uso para autenticação
+const jwtSecret = process.env.JWT_SECRET || 'default_secret_key';
+const loginUseCase = new LoginUseCase(userRepository, jwtSecret);
+
+// Inicialização do middleware de autenticação
+const authMiddleware = new AuthMiddleware(jwtSecret);
 
 // Inicialização dos controladores
 const exerciseController = new ExerciseController(
@@ -91,6 +124,16 @@ const shareController = new ShareController(
   deleteShareUseCase
 );
 
+const userController = new UserController(
+  createUserUseCase,
+  getUserUseCase,
+  listUsersUseCase,
+  updateUserUseCase,
+  deleteUserUseCase
+);
+
+const authController = new AuthController(loginUseCase);
+
 // Inicialização do Express
 const app = express();
 
@@ -115,9 +158,13 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
-app.use('/api/exercises', makeExerciseRoutes(exerciseController));
-app.use('/api/workouts', makeWorkoutRoutes(workoutController));
-app.use('/api/share', makeShareRoutes(shareController));
+app.use('/api/auth', makeAuthRoutes(authController));
+app.use('/api/users', makeUserRoutes(userController, authMiddleware));
+
+// Rotas protegidas que requerem autenticação
+app.use('/api/exercises', authMiddleware.authenticate(), authMiddleware.authorize(['admin', 'root']), makeExerciseRoutes(exerciseController));
+app.use('/api/workouts', authMiddleware.authenticate(), makeWorkoutRoutes(workoutController));
+app.use('/api/share', authMiddleware.authenticate(), makeShareRoutes(shareController));
 
 // Error handling middleware
 app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -133,4 +180,4 @@ if (process.env.NODE_ENV !== 'test') {
   });
 }
 
-export default app; 
+export default app;
