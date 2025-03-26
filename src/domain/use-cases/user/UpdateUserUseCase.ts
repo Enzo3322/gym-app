@@ -39,7 +39,6 @@ export class UpdateUserUseCase {
       params.email || user.email,
       password,
       params.role || user.role,
-      user.createdAt
     );
 
     return this.userRepository.update(updatedUser);
