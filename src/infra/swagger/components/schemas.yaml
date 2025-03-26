@@ -1,0 +1,328 @@
+components:
+  schemas:
+    # Error schema
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+
+    # User schemas
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the user
+        name:
+          type: string
+          description: User's name
+        email:
+          type: string
+          format: email
+          description: User's email
+        role:
+          type: string
+          enum: [user, admin, root]
+          description: User's role
+        createdAt:
+          type: string
+          format: date-time
+          description: User creation date
+      required:
+        - id
+        - name
+        - email
+        - role
+        - createdAt
+
+    UserCreate:
+      type: object
+      properties:
+        name:
+          type: string
+          description: User's name
+        email:
+          type: string
+          format: email
+          description: User's email
+        password:
+          type: string
+          format: password
+          description: User's password
+        role:
+          type: string
+          enum: [user, admin, root]
+          description: User's role (defaults to 'user')
+      required:
+        - name
+        - email
+        - password
+
+    UserUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          description: User's name
+        email:
+          type: string
+          format: email
+          description: User's email
+        password:
+          type: string
+          format: password
+          description: User's password
+        role:
+          type: string
+          enum: [user, admin, root]
+          description: User's role
+
+    # Exercise schemas
+    Exercise:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the exercise
+        name:
+          type: string
+          description: Exercise name
+        description:
+          type: string
+          description: Exercise description
+        muscleGroup:
+          type: string
+          description: Primary muscle group targeted
+        createdAt:
+          type: string
+          format: date-time
+          description: Exercise creation date
+      required:
+        - id
+        - name
+        - muscleGroup
+        - createdAt
+
+    ExerciseCreate:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Exercise name
+        description:
+          type: string
+          description: Exercise description
+        muscleGroup:
+          type: string
+          description: Primary muscle group targeted
+      required:
+        - name
+        - muscleGroup
+
+    ExerciseUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Exercise name
+        description:
+          type: string
+          description: Exercise description
+        muscleGroup:
+          type: string
+          description: Primary muscle group targeted
+
+    # Workout schemas
+    Workout:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the workout
+        name:
+          type: string
+          description: Workout name
+        description:
+          type: string
+          description: Workout description
+        userId:
+          type: string
+          format: uuid
+          description: ID of the user who created the workout
+        exercises:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkoutExercise'
+          description: Exercises in the workout
+        createdAt:
+          type: string
+          format: date-time
+          description: Workout creation date
+      required:
+        - id
+        - name
+        - userId
+        - createdAt
+        - exercises
+
+    WorkoutCreate:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Workout name
+        description:
+          type: string
+          description: Workout description
+      required:
+        - name
+
+    WorkoutUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Workout name
+        description:
+          type: string
+          description: Workout description
+
+    WorkoutExercise:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the workout exercise
+        exerciseId:
+          type: string
+          format: uuid
+          description: ID of the exercise
+        workoutId:
+          type: string
+          format: uuid
+          description: ID of the workout
+        sets:
+          type: integer
+          description: Number of sets
+        reps:
+          type: integer
+          description: Number of repetitions
+        weight:
+          type: number
+          format: float
+          description: Weight in kg
+        restTime:
+          type: integer
+          description: Rest time between sets in seconds
+        notes:
+          type: string
+          description: Additional notes
+        exercise:
+          $ref: '#/components/schemas/Exercise'
+          description: The exercise details
+      required:
+        - id
+        - exerciseId
+        - workoutId
+        - sets
+        - reps
+
+    AddExerciseToWorkout:
+      type: object
+      properties:
+        exerciseId:
+          type: string
+          format: uuid
+          description: ID of the exercise to add
+        sets:
+          type: integer
+          description: Number of sets
+        reps:
+          type: integer
+          description: Number of repetitions
+        weight:
+          type: number
+          format: float
+          description: Weight in kg
+        restTime:
+          type: integer
+          description: Rest time between sets in seconds
+        notes:
+          type: string
+          description: Additional notes
+      required:
+        - exerciseId
+        - sets
+        - reps
+
+    # Shared Workout schemas
+    SharedWorkout:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the shared workout
+        workoutId:
+          type: string
+          format: uuid
+          description: ID of the shared workout
+        shareUrl:
+          type: string
+          format: uri
+          description: URL to access the shared workout
+        qrCode:
+          type: string
+          description: Base64 encoded QR code image
+        expiresAt:
+          type: string
+          format: date-time
+          description: Expiration date
+        createdAt:
+          type: string
+          format: date-time
+          description: Creation date
+        workout:
+          $ref: '#/components/schemas/Workout'
+          description: The shared workout details
+      required:
+        - id
+        - workoutId
+        - shareUrl
+        - qrCode
+        - createdAt
+
+    # Auth schemas
+    Login:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          description: User's email
+        password:
+          type: string
+          format: password
+          description: User's password
+      required:
+        - email
+        - password
+
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: JWT token
+        user:
+          $ref: '#/components/schemas/User'
+          description: User information
+      required:
+        - token
+        - user 

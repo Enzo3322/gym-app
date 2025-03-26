@@ -2,6 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import rateLimit from 'express-rate-limit';
 import dotenv from 'dotenv';
+import swaggerUi from 'swagger-ui-express';
+import swaggerSpec from './infra/swagger/config';
 
 // Configuração do ambiente
 dotenv.config();
@@ -55,6 +57,7 @@ import { makeWorkoutRoutes } from './infra/routes/workoutRoutes';
 import { makeShareRoutes } from './infra/routes/shareRoutes';
 import { makeUserRoutes } from './infra/routes/userRoutes';
 import { makeAuthRoutes } from './infra/routes/authRoutes';
+import { makeSwaggerRoutes } from './infra/routes/swaggerRoutes';
 
 // Importação do middleware de autenticação
 import { AuthMiddleware } from './infra/middlewares/AuthMiddleware';
@@ -157,6 +160,9 @@ if (process.env.DISABLE_RATE_LIMIT !== 'true') {
 app.use(cors());
 app.use(express.json());
 
+// Swagger documentation
+app.use('/api-docs', makeSwaggerRoutes());
+
 // Routes
 app.use('/api/auth', makeAuthRoutes(authController));
 app.use('/api/users', makeUserRoutes(userController, authMiddleware));
@@ -177,6 +183,7 @@ const PORT = process.env.PORT || 3000;
 if (process.env.NODE_ENV !== 'test') {
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
+    console.log(`Swagger documentation available at http://localhost:${PORT}/api-docs`);
   });
 }
 
