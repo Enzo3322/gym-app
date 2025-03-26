@@ -108,12 +108,13 @@ export class WorkoutController {
 
   async addExerciseToWorkout(req: Request, res: Response): Promise<void> {
     try {
-      const { exerciseId, reps, interval } = req.body;
+      const { exerciseId, reps, interval, weight } = req.body;
       const workout = await this.addExerciseToWorkoutUseCase.execute({
         workoutId: req.params.id,
         exerciseId,
         reps,
-        interval
+        interval,
+        weight
       });
       
       if (!workout) {

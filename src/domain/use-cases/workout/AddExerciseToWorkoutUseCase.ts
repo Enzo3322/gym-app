@@ -7,6 +7,7 @@ export interface AddExerciseToWorkoutInput {
   exerciseId: string;
   reps?: number;
   interval?: number;
+  weight?: number;
 }
 
 export class AddExerciseToWorkoutUseCase {
@@ -16,7 +17,7 @@ export class AddExerciseToWorkoutUseCase {
   ) {}
 
   async execute(input: AddExerciseToWorkoutInput): Promise<Workout | null> {
-    const { workoutId, exerciseId, reps, interval } = input;
+    const { workoutId, exerciseId, reps, interval, weight } = input;
 
     const workout = await this.workoutRepository.findById(workoutId);
     if (!workout) {
@@ -31,7 +32,8 @@ export class AddExerciseToWorkoutUseCase {
     const workoutExercise: WorkoutExercise = {
       exerciseId,
       reps,
-      interval
+      interval,
+      weight
     };
 
     await this.workoutRepository.addExercise(workoutId, workoutExercise);

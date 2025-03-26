@@ -19,7 +19,8 @@ export class DrizzleWorkoutRepository implements WorkoutRepository {
         workoutId: workout.id,
         exerciseId: exercise.exerciseId,
         reps: exercise.reps,
-        interval: exercise.interval
+        interval: exercise.interval,
+        weight: exercise.weight
       }));
 
       await db.insert(workoutExercises).values(workoutExercisesData);
@@ -90,7 +91,8 @@ export class DrizzleWorkoutRepository implements WorkoutRepository {
       workoutId,
       exerciseId: exercise.exerciseId,
       reps: exercise.reps,
-      interval: exercise.interval
+      interval: exercise.interval,
+      weight: exercise.weight
     });
   }
 
@@ -106,17 +108,20 @@ export class DrizzleWorkoutRepository implements WorkoutRepository {
 
   async getWorkoutExercises(workoutId: string): Promise<WorkoutExercise[]> {
     const result = await db.select({
-      exerciseId: workoutExercises.exerciseId,
-      reps: workoutExercises.reps,
-      interval: workoutExercises.interval
+      exercise: exercises,
+      workoutExercise: workoutExercises
     })
     .from(workoutExercises)
+    .leftJoin(exercises, eq(workoutExercises.exerciseId, exercises.id))
     .where(eq(workoutExercises.workoutId, workoutId));
     
     return result.map(item => ({
-      exerciseId: item.exerciseId,
-      reps: item.reps || undefined,
-      interval: item.interval || undefined
+      exerciseId: item.workoutExercise.exerciseId,
+      reps: item.workoutExercise.reps || undefined,
+      interval: item.workoutExercise.interval || undefined,
+      weight: item.workoutExercise.weight || undefined,
+      name: item.exercise?.name || '',
+      muscleGroup: item.exercise?.muscleGroup || undefined
     }));
   }
 } 

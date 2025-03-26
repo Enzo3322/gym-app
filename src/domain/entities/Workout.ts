@@ -1,9 +1,10 @@
-import { Exercise } from './Exercise';
-
 export interface WorkoutExercise {
   exerciseId: string;
   reps?: number;
   interval?: number;
+  weight?: number;
+  name?: string;
+  muscleGroup?: string;
 }
 
 export interface Workout {
@@ -36,10 +37,10 @@ export class WorkoutEntity implements Workout {
     return new WorkoutEntity(id, name, description, exercises);
   }
 
-  addExercise(exerciseId: string, reps?: number, interval?: number): WorkoutEntity {
+  addExercise(exerciseId: string, reps?: number, interval?: number, weight?: number): WorkoutEntity {
     const exercises = [
       ...this.exercises,
-      { exerciseId, reps, interval }
+      { exerciseId, reps, interval, weight }
     ];
     return new WorkoutEntity(this.id, this.name, this.description, exercises);
   }

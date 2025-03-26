@@ -22,6 +22,7 @@ export const workoutExercises = sqliteTable('workout_exercises', {
     .references(() => exercises.id),
   reps: integer('reps'),
   interval: integer('interval'),
+  weight: integer('weight'),
 });
 
 export const sharedWorkouts = sqliteTable('shared_workouts', {

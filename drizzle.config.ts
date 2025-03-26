@@ -6,6 +6,6 @@ export default {
   dialect: 'sqlite',
   driver: 'better-sqlite',
   dbCredentials: {
-    url: './src/infra/database/db.sqlite',
+    url: './sqlite/db.sqlite',
   },
 } as Config; 
